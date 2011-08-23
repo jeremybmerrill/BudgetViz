@@ -1,0 +1,173 @@
+body{
+    height: 1000px;
+}
+
+body div#thewholething{
+    position: relative; 
+    margin-top: 100px; 
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px; /*900px */
+    height: 800px; /* 800px */
+}
+.holder{
+    width: 20%;
+    height: 100%;
+}
+.coverer{
+    position: relative;
+    background-color: inherit;
+    width: 100%;
+    opacity:1.0;
+    z-index:0;
+    float: left;
+    border-top: solid;
+    border-top-color: red;
+    border-top-width: 2px;
+    overflow: hidden;
+}
+
+.whole_bill_holder{
+    width: 100%;
+    height: 100%;
+}
+
+.not-rightmost{
+    border-right-style: solid;
+    border-right-color: red;
+    border-right-width: 2px;
+}
+
+.bill-coverer span.expenditurename{
+    color:white;
+    font-family: 'Quattrocento Sans';
+    font-weight: bold;
+    font-size: 100%;
+    padding-left: 1px;
+    word-wrap: break-word;
+}
+.bill-coverer div.name{
+    text-align: center;
+}
+.bill{
+    clear: both;
+    margin-bottom: 5px;
+    width: 100%;
+    height: 15%;
+    background-size: 100% 100%;
+    -moz-background-size: 100% 100%;           /* Gecko 1.9.2 (Firefox 3.6) */
+    -o-background-size: 100% 100%;         /* Opera 9.5 */
+    -webkit-background-size: 100% 100%;          /* Safari 3.0 */
+    position: relative;
+    border-bottom-style: solid;
+    border-bottom-color: red;
+    border-bottom-width: 2px;
+    border-left-style: solid;
+    border-left-color: red;
+    border-bottom-width: 2px;
+    border-right-style: solid;
+    border-right-color: red;
+    border-right-width: 2px;
+}
+
+.twenty{
+    background-image: url('twenty.jpg');
+}
+.ten{
+    background-image: url('ten.jpg');
+    border-top-style: solid;
+    border-top-color: red;
+    border-top-width: 2px;
+}
+.five{
+    background-image: url('five.jpg');
+    border-top-style: solid;
+    border-top-color: red;
+    border-top-width: 2px;
+}
+.one{
+    background-image: url('one.jpg');
+    border-top-style: solid;
+    border-top-color: red;
+    border-top-width: 2px;
+}
+.coin-holder{
+    clear: both;
+    margin-bottom: 5px;
+    width: 100%;
+    height: 8%;
+}
+.coin{
+    float: left;
+    background-size: 100% 100%;
+    -moz-background-size: 100% 100%;           /* Gecko 1.9.2 (Firefox 3.6) */
+    -o-background-size: 100% 100%;         /* Opera 9.5 */
+    -webkit-background-size: 100% 100%;          /* Safari 3.0 */
+    width: 25%;
+    height: 100%;
+    position: relative;
+}
+.coin .bill-coverer{
+    position: absolute;
+}
+.coin .bill-coverer .name{
+    width: 100%;
+}
+.quarter{
+    background-image: url('quarter.jpg');
+}
+.dime{
+    background-image: url('dime.jpg');
+}
+.nickel{
+    background-image: url('nickel.jpg');
+}
+.penny{
+    background-image: url('penny.jpg');
+}
+
+.name{
+    position: absolute;
+}
+
+
+div.left_continue{
+    border-left-width: 0px;
+}
+div.right_continue{
+    border-right-width: 0px;
+}
+/* Make these a class.*/
+div#left-stuff{
+    width: 32%;
+    height: 100%;
+    float: left;
+    margin-right: 1%;
+}
+div#center-stuff{
+    width: 32%;
+    margin-right: 1%;
+    height: 100%;
+    float: left;
+}
+div#right-stuff{
+    width: 32%;
+    margin-right: 1%;
+    height: 100%;
+    float: left;
+}
+.left_partial{
+    border-left-style: solid;
+    border-left-color: red;
+    border-bottom-width: 2px;
+}
+
+div#credit{
+    text-align: right;
+    width: 100%;
+    font-size: 10pt;
+    color: gray;
+}
+div#credit a, div#credit a:visited{
+    color: #739db0;
+}
