@@ -10,6 +10,11 @@ body div#thewholething{
     width: 900px; /*900px */
     height: 800px; /* 800px */
 }
+h1{
+  font-family: 'Play', sans-serif; font-weight: normal;
+}
+h1 span#ascmc { font-weight: bold; }
+
 .holder{
     width: 20%;
     height: 100%;
@@ -21,10 +26,12 @@ body div#thewholething{
     opacity:1.0;
     z-index:0;
     float: left;
-    border-top: solid;
-    border-top-color: red;
-    border-top-width: 2px;
     overflow: hidden;
+}
+.nontopcoverer{
+    border-top: dashed;
+    border-top-color: white;
+    border-top-width: 2px;
 }
 
 .whole_bill_holder{
@@ -33,8 +40,8 @@ body div#thewholething{
 }
 
 .not-rightmost{
-    border-right-style: solid;
-    border-right-color: red;
+    border-right-style: dashed;
+    border-right-color: white;
     border-right-width: 2px;
 }
 
@@ -59,15 +66,15 @@ body div#thewholething{
     -o-background-size: 100% 100%;         /* Opera 9.5 */
     -webkit-background-size: 100% 100%;          /* Safari 3.0 */
     position: relative;
-    border-bottom-style: solid;
-    border-bottom-color: red;
+    /*border-bottom-style: solid;
+    border-bottom-color: white;
     border-bottom-width: 2px;
     border-left-style: solid;
-    border-left-color: red;
+    border-left-color: white;
     border-bottom-width: 2px;
     border-right-style: solid;
-    border-right-color: red;
-    border-right-width: 2px;
+    border-right-color: white;
+    border-right-width: 2px;*/
 }
 
 .twenty{
@@ -75,21 +82,12 @@ body div#thewholething{
 }
 .ten{
     background-image: url('ten.jpg');
-    border-top-style: solid;
-    border-top-color: red;
-    border-top-width: 2px;
 }
 .five{
     background-image: url('five.jpg');
-    border-top-style: solid;
-    border-top-color: red;
-    border-top-width: 2px;
 }
 .one{
     background-image: url('one.jpg');
-    border-top-style: solid;
-    border-top-color: red;
-    border-top-width: 2px;
 }
 .coin-holder{
     clear: both;
@@ -115,15 +113,23 @@ body div#thewholething{
 }
 .quarter{
     background-image: url('quarter.jpg');
+    width: 25%;
+    height: 100%;
 }
 .dime{
     background-image: url('dime.jpg');
+    width: 20%;
+    height: 75%;
 }
 .nickel{
     background-image: url('nickel.jpg');
+    width: 23%;
+    height: 85%;
 }
 .penny{
     background-image: url('penny.jpg');
+    width: 22%;
+    height: 79%;
 }
 
 .name{
@@ -157,8 +163,8 @@ div#right-stuff{
     float: left;
 }
 .left_partial{
-    border-left-style: solid;
-    border-left-color: red;
+    border-left-style: dashed;
+    border-left-color: white;
     border-bottom-width: 2px;
 }
 

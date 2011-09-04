@@ -10,17 +10,16 @@ Jeremy B. Merrill
 
 from jinja2 import Environment, FileSystemLoader, Markup
 from copy import deepcopy
+from vizconfig import TOTAL_PER_STUDENT, LARGEST_BILL, NAME_CORRECTIONS, TRANCHES_PER_BILL, BILLS_PER_COLUMN
 
 GROUP_MAX = 201
 TOLERANCE = 7
 TOLERANCE_EXACT = 1
-TRANCH_WIDTH = 20
+TRANCH_WIDTH = 100 / TRANCHES_PER_BILL
 CALLOUT_WIDTH = 60 #characters
 BORDER_WIDTH = 2 #as set in css, .coverer
-TOTAL_PER_STUDENT = 276.30
-LARGEST_BILL = 20 #i.e. the largest bill is a twenty dollar bill
-NAME_CORRECTIONS = {"Office Supplies": "Of.Supp",
-            "President's Room & Board": "Prez's Room & Board" }
+
+
 
 small_bills = [(10, "ten"), (5, "five"), (1, "one")]
 coins = [(.25, "quarter"), (.10, "dime"), (.05, "nickel"), (.01, "penny")]
@@ -92,6 +91,7 @@ def processExpenditure(e):
     e["pixels"] = ((cost_per / 4) % 1) *200
     e["bills"] = []
     e["which_bill"] = 0
+    #print " ".join([e["safe_name"], "$" + str(e["cost_per"]), "=", str(e["whole_tranches"]), str(e["pixels"])]) + "<br />"
     return e
 
 def processSmallBills(e):
@@ -107,7 +107,7 @@ def processSmallBills(e):
             for x in xrange(of_this_type):
                 e["bills"].append(money_name)
             cost_per = cost_per % money_amt
-    print "<!--",e["cost_per"], e["bills"],"-->"
+    #print "<!--",e["cost_per"], e["bills"],"-->"
     e = display_name_format(e, NAME_CORRECTIONS)
 
     e["left"] = 40                #left, top, whole_tranches_in_this_bill, 
@@ -124,13 +124,14 @@ expenditures.append({"display_name":"ASCMC Senate","cost":10000,"safe_name":"sen
 expenditures.append({"display_name":"Senate Student Trips", "cost":2000,"safe_name":"senate_trips", "blurb":"The ASCMC Senate has a separate fund for funding student trips to, for instance, Harvard MUN."})
 expenditures.append({"display_name":"Campus Organizations Chair Fund", "cost":8500,"safe_name":"co_chair", "blurb":"The CO Chair, Stagory Athena '11, has a separate fund to disburse to clubs at his/her whim."})
 expenditures.append({"display_name":"General Fund", "cost":1285,"safe_name":"general_fund", "blurb":"God only knows what this is for..."})
-#expenditures.append({"display_name":"Class 2011 (2012)", "cost":18000,"safe_name":"class_2011", "blurb":"The Senior Class budget. Spent by the Senior Class President Mary Doyle '12 on parties, such as the 100 Days and 200 Days parties."})
+expenditures.append({"display_name":"Class 2011 (2012)", "cost":18000,"safe_name":"class_2011", "blurb":"The Senior Class budget. Spent by the Senior Class President Mary Doyle '12 on parties, such as the 100 Days and 200 Days parties."})
 expenditures.append({"display_name":"Class 2012 (2013)", "cost":3500, "safe_name":"class_2012", "blurb":"The Junior Class budget. Spent by the Junior Class President, cStagory Athena '13."})
 expenditures.append({"display_name":"Class 2013 (2014)", "cost":3000, "safe_name":"class_2013", "blurb":"The Sophomore Class budget. Spent by the Sophomore Class President, Stagory Athena '14."})
 expenditures.append({"display_name":"Class 2014 (2015)", "cost":2000, "safe_name":"class_2014", "blurb":"The Freshman Class budget. Spent by their president, when he or she is elected."})
 expenditures.append({"display_name":"SAC", "cost":17500, "safe_name":"sac", "blurb":"The Student Activities Chair's budget. The SAC, Stagory Athena, plans many of the Saturday night events."})
 expenditures.append({"display_name":"DAC", "cost":8500, "safe_name":"dac", "blurb":"The Dorm Activities Chair's budget. The DAC, Stagory Athena, plans TNC."})
 expenditures.append({"display_name":"SLC", "cost":11500, "safe_name":"slc", "blurb":"The Sober Loser Chair's budget. The SLC, Burke Zanft, plans dry activities like Hub Quiz."})
+expenditures.append({"display_name":"Campus Security (Private)", "cost":15000, "safe_name":"private_sec", "blurb":"blah blah"})
 expenditures.append({"display_name":"Off-Campus Sports Events", "cost":3500, "safe_name":"offcampus_sports", "blurb":"blah blah."})
 expenditures.append({"display_name":"Monte Carlo", "cost":12000, "safe_name":"monte", "blurb":"Monte Carlo blah blah"})
 expenditures.append({"display_name":"White Party", "cost":4000, "safe_name":"white", "blurb":"blah blah"})
@@ -139,10 +140,10 @@ expenditures.append({"display_name":"President's Fund", "cost":2500, "safe_name"
 expenditures.append({"display_name":"Dorms Total", "cost":31500, "safe_name":"dorms", "blurb":"blah blah"})
 expenditures.append({"display_name":"Forum", "cost":6000, "safe_name":"forum", "blurb":"blah blah"})
 expenditures.append({"display_name":"Ayer", "cost":29000, "safe_name":"ayer", "blurb":"blah blah"})
-#expenditures.append({"display_name":"Office Supplies", "cost":750, "safe_name":"office_supplies", "blurb":"blah blah"})
+expenditures.append({"display_name":"Office Supplies", "cost":750, "safe_name":"office_supplies", "blurb":"blah blah"})
 expenditures.append({"display_name":"Contingency", "cost":25000, "safe_name":"contingency", "blurb":"blah blah"})
 expenditures.append({"display_name":"Event(s) Damages", "cost":5000, "safe_name":"damages", "blurb":"blah blah"})
-expenditures.append({"display_name":"Campus Security (Private)", "cost":15000, "safe_name":"private_sec", "blurb":"blah blah"})
+
 expenditures.append({"display_name":"Student Security", "cost":5000, "safe_name":"student_sec", "blurb":"blah blah"})
 expenditures.append({"display_name":"Stipends", "cost":9400, "safe_name":"stipends", "blurb":"blah blah"})
 expenditures.append({"display_name":"President's Room & Board", "cost":7000, "safe_name":"pres_room", "blurb":"blah blah"})
@@ -157,12 +158,7 @@ dollars_into_small_bills_and_coins = TOTAL_PER_STUDENT % LARGEST_BILL
 small_bills_and_coins = []
 small_bills_and_coins = findSmallBills(dollars_into_small_bills_and_coins, expenditures)[1]
 
-#TODO remove from expenditures the ones that are going into small bills/coins
-#<temporary>
-#small_bills_and_coins.append({"display_name":"Class 2011 (2012)", "cost":18000,"safe_name":"class_2011", "blurb":"The Senior Class budget. Spent by the Senior Class President Mary Doyle '12 on parties, such as the 100 Days and 200 Days parties."})
-#small_bills_and_coins.append({"display_name":"Office Supplies", "cost":750, "safe_name":"office_supplies", "blurb":"blah blah"})
-#small_bills_and_coins = [processExpenditure(e) for e in small_bills_and_coins] 
-#</temporary>
+
 for exp in small_bills_and_coins:
     expenditures.remove(exp)
 small_bills_and_coins = [processSmallBills(e) for e in small_bills_and_coins]
@@ -184,7 +180,7 @@ def expenditureMatch(expenditure1, expenditures_rest, key="pixels"):
             matched_expenditures.append(expenditure)
             expenditures_rest.remove(expenditure)
             target = target - expenditure[key]
-            #print "Pairing " + str([exp["display_name"] + ": " + str(exp[key]) for exp in matched_expenditures]) + ". Diff: " + str(target)
+            #print "Pairing " + str([exp["display_name"] + ": " + str(exp[key]) for exp in matched_expenditures]) + ". Diff: " + str(target) + "<br />"
             expenditures_rest.reverse()
             return matched_expenditures, expenditures_rest
         if (abs(expenditure[key] - target) < TOLERANCE) \
@@ -193,7 +189,7 @@ def expenditureMatch(expenditure1, expenditures_rest, key="pixels"):
             matched_expenditures.append(expenditure)
             expenditures_rest.remove(expenditure)
             target = target - expenditure[key]
-    #print "Pairing " + str([exp["display_name"] + ": " + str(exp[key]) for exp in matched_expenditures]) + ". Diff: " + str(target)
+    #print "Pairing " + str([exp["display_name"] + ": " + str(exp[key]) for exp in matched_expenditures]) + ". Diff: " + str(target) + "<br />"
     expenditures_rest.reverse()
     return matched_expenditures, expenditures_rest
 
@@ -207,20 +203,38 @@ while sorted_expenditures: #... is not empty
 
 #-------------------
 tranches = [] #a tranch is a list of tuples: (display_height, expenditure)
-#TODO: order expenditures in match as: (big) small* (big)
+
+def orderMatch(match):
+    """ Put a match in order so that the first and last elements have whole tranches and all middle elements don't."""
+    new_match = [[] for x in xrange(0, len(match))]
+    expenditures_with_whole_tranches = [exp for exp in match if exp["whole_tranches"] > 0]
+    assert len(expenditures_with_whole_tranches) <= 2
+    if len(expenditures_with_whole_tranches) > 0:
+        new_match[0] = expenditures_with_whole_tranches[0]
+        if len(expenditures_with_whole_tranches) > 1:
+            new_match[-1] = expenditures_with_whole_tranches[-1]
+        for index, exp in enumerate([exp for exp in match if exp["whole_tranches"] == 0]):
+            new_match[index+1] = exp
+        return new_match
+    else:
+        return match
+
+
 for match in list_of_matches:
+    match = orderMatch(match)
+    print ' '.join([exp["safe_name"] + " " + str(exp["whole_tranches"]) for exp in match]) + "<br />"
     mixtranch = [] #mixtranch is a tranch with more than one item in it.
     
-    #tranch_item first
+    #first tranch_item
     for x in range(0,int(match[0]["whole_tranches"])):
         tranches.append([(convertPixelToPercent(GROUP_MAX), match[0])])
     mixtranch.append((convertPixelToPercent(match[0]["pixels"]), match[0]))
     
-    #tranch_item second through second-to-last
+    # second through second-to-last tranch_item 
     for exp in match[1:-1]:
        mixtranch.append((convertPixelToPercent(exp["pixels"]), exp))
     
-    #tranch_item last
+    #last tranch_item
     if len(match) > 1:
         mixtranch.append((convertPixelToPercent(match[-1]["pixels"]), match[-1]))
 
@@ -231,9 +245,9 @@ for match in list_of_matches:
         pixelsum += tranch_item[0]
     for i,tranch_item in enumerate(mixtranch):
         if i < len(mixtranch)-1:
-            tranch_item = ((convertPixelToPercent(tranch_item[0] * GROUP_MAX / pixelsum) - BORDER_WIDTH), tranch_item[1]) #TODO -2 accounts for border width, only for height though.
+            tranch_item = ((convertPixelToPercent(tranch_item[0] * GROUP_MAX / pixelsum) - BORDER_WIDTH), tranch_item[1])
         else:
-            tranch_item = ((convertPixelToPercent(tranch_item[0] * GROUP_MAX / pixelsum)), tranch_item[1]) #TODO -2 accounts for border width
+            tranch_item = ((convertPixelToPercent(tranch_item[0] * GROUP_MAX / pixelsum)), tranch_item[1]) 
         mixtranch2.append(tranch_item)
     tranches.append(mixtranch2)
     if len(match) != 1:
@@ -248,46 +262,100 @@ while len(tranches) >= 5:
     tranches = tranches[5:]
 
 
-
 bills_by_exp = []
+temp_storage = []
 for bill_i,bill in enumerate(bills):
-    bills_by_exp.append([])
+    if bill_i == (BILLS_PER_COLUMN *2):
+      temp_storage.reverse()
+      bills_by_exp.extend(temp_storage)
+    if bill_i >= BILLS_PER_COLUMN and bill_i < BILLS_PER_COLUMN *2:
+      temp_storage.append([])
+    else:
+      bills_by_exp.append([])
+    #if bill_i % 2 == 0:
+    #  bill.reverse() #for the "boustrephedon"-style of layout.
     for tranch_index, tranch in enumerate(bill):
         for exp_index,expenditure in enumerate(tranch):
-            if (expenditure[1]["safe_name"] not in [x["safe_name"] for x in bills_by_exp[bill_i]]): 
+            #print str(expenditure) + "<br />"
 
-                FONT_HEIGHT = 16 / GROUP_MAX #needs to be a percent: the number should be in pixels.
+            if bill_i >= BILLS_PER_COLUMN and bill_i < BILLS_PER_COLUMN *2:
+              not_in_bill_yet = (expenditure[1]["safe_name"] not in [x["safe_name"] for x in temp_storage[bill_i-BILLS_PER_COLUMN]])
+            else:
+              not_in_bill_yet = (expenditure[1]["safe_name"] not in [x["safe_name"] for x in bills_by_exp[bill_i]])
+            if not_in_bill_yet: 
+                FONT_HEIGHT = (16.0 / GROUP_MAX) * 100 #needs to be a percent: make the number (i.e. "16" on this line) should be in pixels.
 
                 expenditure = (expenditure[0], display_name_format(expenditure[1], NAME_CORRECTIONS))
 
                 expenditure[1]["left"] = tranch_index * TRANCH_WIDTH #this is a percentage!!
-                expenditure[1]["top"] = 0
+                if expenditure[0] < FONT_HEIGHT+4:
+                    expenditure[1]["left"] += 20
 
-                #left, top, whole_tranches_in_this_bill, 
+                expenditure[1]["top"] = 0
 
                 if expenditure[1]["which_bill"] == 0:
                     expenditure[1]["leftover_tranches"] = expenditure[1]["whole_tranches"] #only if it isn't already set?
-                expenditure[1]["whole_tranches_in_this_bill"] = min(expenditure[1]["leftover_tranches"], 5, 4-tranch_index)
-                expenditure[1]["leftover_tranches"] -= min(expenditure[1]["leftover_tranches"], 5, 4-tranch_index)
+                tranches_left_in_this_bill = 5-tranch_index
+
+                if expenditure[0] != 0 and expenditure[0] != 100:
+                  tranches_left_in_this_bill = max(0, tranches_left_in_this_bill-1)
+                expenditure[1]["whole_tranches_in_this_bill"] = min(expenditure[1]["leftover_tranches"], 5, tranches_left_in_this_bill)
+                expenditure[1]["leftover_tranches"] -= min(expenditure[1]["leftover_tranches"], 5, tranches_left_in_this_bill)
 
                 expenditure[1]["text_width"] = expenditure[1]["whole_tranches_in_this_bill"] * TRANCH_WIDTH
-                if expenditure[1]["whole_tranches_in_this_bill"] == 0 or (expenditure[0] > FONT_HEIGHT and tranch_index != 4 and expenditure[1]["which_bill"] == 0):
+                if (expenditure[0] > FONT_HEIGHT+4 and expenditure[0] < GROUP_MAX and expenditure[1]["which_bill"] == 0 and (tranch_index + expenditure[1]["whole_tranches_in_this_bill"] < 5)) and bill_i % 2 == 1:
                     expenditure[1]["text_width"] += 20
-                    #TODO: this shouldn't happen if the partial bit is in a diff bill.
+                    print "Adding 20 to " + expenditure[1]["safe_name"] + " such that " + str(expenditure[0]) + " > " + str(FONT_HEIGHT+4) +  "<br />"
+
+                if expenditure[1]["whole_tranches_in_this_bill"] == 0:
+                    expenditure[1]["text_width"] = 20
+
+                if bill_i % 2 == 0:
+                  #print expenditure[1]["safe_name"] + " was at " + str(expenditure[1]["left"]) +" with width " + str(expenditure[1]["text_width"]) + "<br />"
+                  expenditure[1]["left"] = 100 - (expenditure[1]["left"] + (expenditure[1]["text_width"]))
+                  #Reflect  the text for reversed bills.
+                  if (expenditure[0] > FONT_HEIGHT+4 and expenditure[0] < GROUP_MAX and expenditure[1]["which_bill"] == 0 and (tranch_index + expenditure[1]["whole_tranches_in_this_bill"] < 5)) and False: #only if it's starting with a partial tranch
+                      expenditure[1]["left"] -= 20
+                      expenditure[1]["top"] = 0
+                      print "adjusting text <br />"
+
 
                 if expenditure[1]["whole_tranches_in_this_bill"] == 0 or expenditure[0] > FONT_HEIGHT:
+                    """if expenditure[0] > FONT_HEIGHT and expenditure[1]["whole_tranches_in_this_bill"] > 0:
+                        try:
+                            expenditure[1]["top"] = tranch[1][0]
+                        except IndexError:
+                            print "Failed on " + expenditure[1]["safe_name"]
+                    el"""
                     if exp_index == 1:
                         expenditure[1]["top"] = tranch[0][0]
                     elif exp_index == 2:
                         expenditure[1]["top"] = tranch[1][0] + tranch[0][0]
                     elif exp_index == 3:
                         expenditure[1]["top"] = tranch[1][0] + tranch[0][0] + tranch[2][0]
+                if expenditure[1]["whole_tranches_in_this_bill"] == 0 and expenditure[0] < FONT_HEIGHT:
+                    expenditure[1]["display_name_split"] = ""
+                    #Don't display names if they don't fit at all.
 
                 if bill_i not in expenditure[1]["bills"]:
                     expenditure[1]["bills"].append(bill_i)
                 #print("<!--",expenditure[1]["safe_name"], "whole_tranches_in_bill", expenditure[1]["whole_tranches_in_this_bill"], "left", expenditure[1]["left"], "text_width", expenditure[1]["text_width"], "-->")
-                bills_by_exp[bill_i].append(deepcopy(expenditure[1]))
+                if bill_i >= BILLS_PER_COLUMN and bill_i < (BILLS_PER_COLUMN *2):
+                  #Flip the second column over.
+                  temp_storage[bill_i-BILLS_PER_COLUMN].append(deepcopy(expenditure[1]))
+                else:
+                  bills_by_exp[bill_i].append(deepcopy(expenditure[1]))
                 expenditure[1]["which_bill"] += 1
+
+
+
+    if bill_i % 2 == 0:
+      bill.reverse() #for the "boustrephedon"-style of layout.
+      #reflect all the text.
+    temp = bills[BILLS_PER_COLUMN:BILLS_PER_COLUMN*2]
+    temp.reverse()
+    bills = bills[:BILLS_PER_COLUMN] + temp + bills[BILLS_PER_COLUMN*2:]
+
 
 template = env.get_template('viztemplate.py')
 
@@ -295,5 +363,6 @@ print template.render({'bills': bills, 'expenditures':expenditures,
                         'GROUP_MAX': GROUP_MAX, 'bills_by_exp':bills_by_exp, 
                         'small_bills_and_coins': small_bills_and_coins, 
                         'small_bills': small_bills,
-                        'coins': coins})
+                        'coins': coins,
+                        'BILLS_PER_SIDE': BILLS_PER_COLUMN})
 
