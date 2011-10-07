@@ -80,7 +80,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
     <script type="text/javascript" src="jquery.qtip-1.0.0-rc3.min.js"></script>
     <title>laremont Port Sid | ASCMC Budget Viz</title>
-    <link rel="stylesheet" type="text/css" href="viz.css" >
+    <link rel="stylesheet" type="text/css" href="BudgetViz_public/viz.css" >
     <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 
@@ -89,6 +89,7 @@
 
 <div id="thewholething" >
 <h1>How Does <span id="ascmc">ASCMC</span> Spend Your Student Fees?</h1>
+<p>{{explanatory_paragraph}}</p>
 {% set bills_per_side = BILLS_PER_SIDE %}
 
 {% for bill in bills: -%}

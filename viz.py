@@ -10,7 +10,7 @@ Jeremy B. Merrill
 
 from jinja2 import Environment, FileSystemLoader, Markup
 from copy import deepcopy
-from vizconfig import TOTAL_PER_STUDENT, LARGEST_BILL, NAME_CORRECTIONS, TRANCHES_PER_BILL, BILLS_PER_COLUMN
+from vizconfig import TOTAL_PER_CAPITA, LARGEST_BILL, NAME_CORRECTIONS, TRANCHES_PER_BILL, BILLS_PER_COLUMN, expenditures, explanatory_paragraph
 
 GROUP_MAX = 201
 TOLERANCE = 7
@@ -119,42 +119,13 @@ def processSmallBills(e):
 def convertPixelToPercent(pixel_height):
     return ((pixel_height / GROUP_MAX) * 100)
 
-expenditures = [] #a list of dicts repring all expenditures
-expenditures.append({"display_name":"ASCMC Senate","cost":10000,"safe_name":"senate", "blurb":"ASCMC Senate meets on Mondays"})
-expenditures.append({"display_name":"Senate Student Trips", "cost":2000,"safe_name":"senate_trips", "blurb":"The ASCMC Senate has a separate fund for funding student trips to, for instance, Harvard MUN."})
-expenditures.append({"display_name":"Campus Organizations Chair Fund", "cost":8500,"safe_name":"co_chair", "blurb":"The CO Chair, Stagory Athena '11, has a separate fund to disburse to clubs at his/her whim."})
-expenditures.append({"display_name":"General Fund", "cost":1285,"safe_name":"general_fund", "blurb":"God only knows what this is for..."})
-expenditures.append({"display_name":"Class 2011 (2012)", "cost":18000,"safe_name":"class_2011", "blurb":"The Senior Class budget. Spent by the Senior Class President Mary Doyle '12 on parties, such as the 100 Days and 200 Days parties."})
-expenditures.append({"display_name":"Class 2012 (2013)", "cost":3500, "safe_name":"class_2012", "blurb":"The Junior Class budget. Spent by the Junior Class President, cStagory Athena '13."})
-expenditures.append({"display_name":"Class 2013 (2014)", "cost":3000, "safe_name":"class_2013", "blurb":"The Sophomore Class budget. Spent by the Sophomore Class President, Stagory Athena '14."})
-expenditures.append({"display_name":"Class 2014 (2015)", "cost":2000, "safe_name":"class_2014", "blurb":"The Freshman Class budget. Spent by their president, when he or she is elected."})
-expenditures.append({"display_name":"SAC", "cost":17500, "safe_name":"sac", "blurb":"The Student Activities Chair's budget. The SAC, Stagory Athena, plans many of the Saturday night events."})
-expenditures.append({"display_name":"DAC", "cost":8500, "safe_name":"dac", "blurb":"The Dorm Activities Chair's budget. The DAC, Stagory Athena, plans TNC."})
-expenditures.append({"display_name":"SLC", "cost":11500, "safe_name":"slc", "blurb":"The Sober Loser Chair's budget. The SLC, Burke Zanft, plans dry activities like Hub Quiz."})
-expenditures.append({"display_name":"Campus Security (Private)", "cost":15000, "safe_name":"private_sec", "blurb":"blah blah"})
-expenditures.append({"display_name":"Off-Campus Sports Events", "cost":3500, "safe_name":"offcampus_sports", "blurb":"blah blah."})
-expenditures.append({"display_name":"Monte Carlo", "cost":12000, "safe_name":"monte", "blurb":"Monte Carlo blah blah"})
-expenditures.append({"display_name":"White Party", "cost":4000, "safe_name":"white", "blurb":"blah blah"})
-expenditures.append({"display_name":"Wedding Party", "cost":12000, "safe_name":"wedding", "blurb":"blah blah"})
-expenditures.append({"display_name":"President's Fund", "cost":2500, "safe_name":"pres_fund", "blurb":"blah blah"})
-expenditures.append({"display_name":"Dorms Total", "cost":31500, "safe_name":"dorms", "blurb":"blah blah"})
-expenditures.append({"display_name":"Forum", "cost":6000, "safe_name":"forum", "blurb":"blah blah"})
-expenditures.append({"display_name":"Ayer", "cost":29000, "safe_name":"ayer", "blurb":"blah blah"})
-expenditures.append({"display_name":"Office Supplies", "cost":750, "safe_name":"office_supplies", "blurb":"blah blah"})
-expenditures.append({"display_name":"Contingency", "cost":25000, "safe_name":"contingency", "blurb":"blah blah"})
-expenditures.append({"display_name":"Event(s) Damages", "cost":5000, "safe_name":"damages", "blurb":"blah blah"})
 
-expenditures.append({"display_name":"Student Security", "cost":5000, "safe_name":"student_sec", "blurb":"blah blah"})
-expenditures.append({"display_name":"Stipends", "cost":9400, "safe_name":"stipends", "blurb":"blah blah"})
-expenditures.append({"display_name":"President's Room & Board", "cost":7000, "safe_name":"pres_room", "blurb":"blah blah"})
-expenditures.append({"display_name":"5C Clubs (Total)", "cost":25165, "safe_name":"clubs_5c", "blurb":"blah blah"})
-expenditures.append({"display_name":"CMC Clubs (Total)", "cost":39150, "safe_name":"clubs_cmc", "blurb":"blah blah"})
 
 expenditures = [processExpenditure(e) for e in expenditures]
 
 #--- Separate expenditures into those which are going into twenties and which are small bills and coins.
 
-dollars_into_small_bills_and_coins = TOTAL_PER_STUDENT % LARGEST_BILL
+dollars_into_small_bills_and_coins = TOTAL_PER_CAPITA % LARGEST_BILL
 small_bills_and_coins = []
 small_bills_and_coins = findSmallBills(dollars_into_small_bills_and_coins, expenditures)[1]
 
@@ -222,7 +193,7 @@ def orderMatch(match):
 
 for match in list_of_matches:
     match = orderMatch(match)
-    print ' '.join([exp["safe_name"] + " " + str(exp["whole_tranches"]) for exp in match]) + "<br />"
+    #print ' '.join([exp["safe_name"] + " " + str(exp["whole_tranches"]) for exp in match]) + "<br />"
     mixtranch = [] #mixtranch is a tranch with more than one item in it.
     
     #first tranch_item
@@ -305,7 +276,7 @@ for bill_i,bill in enumerate(bills):
                 expenditure[1]["text_width"] = expenditure[1]["whole_tranches_in_this_bill"] * TRANCH_WIDTH
                 if (expenditure[0] > FONT_HEIGHT+4 and expenditure[0] < GROUP_MAX and expenditure[1]["which_bill"] == 0 and (tranch_index + expenditure[1]["whole_tranches_in_this_bill"] < 5)) and bill_i % 2 == 1:
                     expenditure[1]["text_width"] += 20
-                    print "Adding 20 to " + expenditure[1]["safe_name"] + " such that " + str(expenditure[0]) + " > " + str(FONT_HEIGHT+4) +  "<br />"
+                    #print "Adding 20 to " + expenditure[1]["safe_name"] + " such that " + str(expenditure[0]) + " > " + str(FONT_HEIGHT+4) +  "<br />"
 
                 if expenditure[1]["whole_tranches_in_this_bill"] == 0:
                     expenditure[1]["text_width"] = 20
@@ -317,7 +288,7 @@ for bill_i,bill in enumerate(bills):
                   if (expenditure[0] > FONT_HEIGHT+4 and expenditure[0] < GROUP_MAX and expenditure[1]["which_bill"] == 0 and (tranch_index + expenditure[1]["whole_tranches_in_this_bill"] < 5)) and False: #only if it's starting with a partial tranch
                       expenditure[1]["left"] -= 20
                       expenditure[1]["top"] = 0
-                      print "adjusting text <br />"
+                      #print "adjusting text <br />"
 
 
                 if expenditure[1]["whole_tranches_in_this_bill"] == 0 or expenditure[0] > FONT_HEIGHT:
@@ -364,5 +335,6 @@ print template.render({'bills': bills, 'expenditures':expenditures,
                         'small_bills_and_coins': small_bills_and_coins, 
                         'small_bills': small_bills,
                         'coins': coins,
-                        'BILLS_PER_SIDE': BILLS_PER_COLUMN})
+                        'BILLS_PER_SIDE': BILLS_PER_COLUMN,
+                        'explanatory_paragraph': explanatory_paragraph,})
 
