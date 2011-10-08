@@ -10,7 +10,7 @@ Jeremy B. Merrill
 
 from jinja2 import Environment, FileSystemLoader, Markup
 from copy import deepcopy
-from vizconfig import TOTAL_PER_CAPITA, LARGEST_BILL, NAME_CORRECTIONS, TRANCHES_PER_BILL, BILLS_PER_COLUMN, expenditures, explanatory_paragraph
+from vizconfig import TOTAL_PER_CAPITA, LARGEST_BILL, NAME_CORRECTIONS, TRANCHES_PER_BILL, BILLS_PER_COLUMN, expenditures, explanatory_paragraph, title
 
 GROUP_MAX = 201
 TOLERANCE = 7
@@ -79,6 +79,7 @@ def processExpenditure(e):
     """add pixels, whole_tranches, and cost_per to expenditure dicts."""
     cost = e["cost"]
     cost_per = cost / 1150.0
+    e["blurb"] = Markup(e["blurb"].replace("'", "\\'"))
 #    if len(e["blurb"]) > CALLOUT_WIDTH:
 #        for i in range(int(len(e["blurb"]) / CALLOUT_WIDTH)):
 #            try:
@@ -86,7 +87,7 @@ def processExpenditure(e):
 #                e["blurb"] = e["blurb"][:split_index] + Markup("<br />") + e["blurb"][split_index:]                
 #            except ValueError:
 #                e["blurb"] = e["blurb"][:(((i + 1) * CALLOUT_WIDTH)+i*6)] + Markup("<br />") + e["blurb"][(((i + 1) * CALLOUT_WIDTH)+i*6):]
-    e["cost_per"] = cost_per
+    e["cost_per"] = float(int(cost_per * 100))/100
     e["whole_tranches"] = cost_per // 4
     e["pixels"] = ((cost_per / 4) % 1) *200
     e["bills"] = []
@@ -336,5 +337,6 @@ print template.render({'bills': bills, 'expenditures':expenditures,
                         'small_bills': small_bills,
                         'coins': coins,
                         'BILLS_PER_SIDE': BILLS_PER_COLUMN,
-                        'explanatory_paragraph': explanatory_paragraph,})
+                        'explanatory_paragraph': Markup(explanatory_paragraph),
+                        'title': Markup(title),})
 

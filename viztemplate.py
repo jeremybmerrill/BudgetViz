@@ -80,7 +80,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
     <script type="text/javascript" src="jquery.qtip-1.0.0-rc3.min.js"></script>
     <title>laremont Port Sid | ASCMC Budget Viz</title>
-    <link rel="stylesheet" type="text/css" href="BudgetViz_public/viz.css" >
+    <link rel="stylesheet" type="text/css" href="BudgetViz_public/viz.css">
     <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 
@@ -88,20 +88,15 @@
 <body>
 
 <div id="thewholething" >
-<h1>How Does <span id="ascmc">ASCMC</span> Spend Your Student Fees?</h1>
+<h1>{{title}}</h1>
 <p>{{explanatory_paragraph}}</p>
+<p id="handheldhelp">Tap an expenditure for more info.</p>
 {% set bills_per_side = BILLS_PER_SIDE %}
 
 {% for bill in bills: -%}
     {% set bill_loop = loop %}
-    {% if loop.index0 == bills_per_side * 0: -%}
-        <div id="left-stuff">
-    {% endif -%}
-    {% if loop.index0 == bills_per_side * 1: -%}
-        <div id="center-stuff">
-    {% endif -%}
-    {% if loop.index0 == bills_per_side * 2 -%}
-        <div id="right-stuff">
+    {% if loop.index0 == bills_per_side * 0 or loop.index0 == bills_per_side * 1 or loop.index0 == bills_per_side * 2: -%}
+        <div class="column">
     {% endif -%}
 
     <div class="bill twenty">
@@ -149,7 +144,8 @@
         {% set exp = expenditure -%}
         {#TODO: Add a document.ready() #}
         $("div#{{exp.safe_name}}_{{bill_loop.index0}}").qtip({
-               content: '{{exp.display_name}}<br />Total allocation: ${{exp.cost}} <br /> Per student: ${{exp.cost_per}} <br /> {{exp.blurb}}',
+               content: {text: '{{exp.display_name}}<br />Total allocation: ${{exp.cost}} <br /> Per student: ${{exp.cost_per}} <br /> {{exp.blurb}}',
+                        prerender: false } ,
                show: {delay: 0, when: 'mouseover'},
                hide: { when: 'mouseout', fixed: true },
                position: {
