@@ -10,7 +10,7 @@ Jeremy B. Merrill
 
 from jinja2 import Environment, FileSystemLoader, Markup
 from copy import deepcopy
-from vizconfig import TOTAL_PER_CAPITA, LARGEST_BILL, NAME_CORRECTIONS, TRANCHES_PER_BILL, BILLS_PER_COLUMN, expenditures, explanatory_paragraph, title
+from vizconfig import TOTAL_PER_CAPITA, LARGEST_BILL, NAME_CORRECTIONS, TRANCHES_PER_BILL, BILLS_PER_COLUMN, NUMBER_OF_STUDENTS, expenditures, explanatory_paragraph, title
 
 GROUP_MAX = 201
 TOLERANCE = 7
@@ -78,7 +78,7 @@ def display_name_format(expenditure, name_corrections):
 def processExpenditure(e):
     """add pixels, whole_tranches, and cost_per to expenditure dicts."""
     cost = e["cost"]
-    cost_per = cost / 1150.0
+    cost_per = cost / float(NUMBER_OF_STUDENTS)
     e["blurb"] = Markup(e["blurb"].replace("'", "\\'"))
 #    if len(e["blurb"]) > CALLOUT_WIDTH:
 #        for i in range(int(len(e["blurb"]) / CALLOUT_WIDTH)):
@@ -180,7 +180,7 @@ def orderMatch(match):
     """ Put a match in order so that the first and last elements have whole tranches and all middle elements don't."""
     new_match = [[] for x in xrange(0, len(match))]
     expenditures_with_whole_tranches = [exp for exp in match if exp["whole_tranches"] > 0]
-    assert len(expenditures_with_whole_tranches) <= 2
+    #assert len(expenditures_with_whole_tranches) <= 2
     if len(expenditures_with_whole_tranches) > 0:
         new_match[0] = expenditures_with_whole_tranches[0]
         if len(expenditures_with_whole_tranches) > 1:
@@ -203,8 +203,9 @@ for match in list_of_matches:
     mixtranch.append((convertPixelToPercent(match[0]["pixels"]), match[0]))
     
     # second through second-to-last tranch_item 
-    for exp in match[1:-1]:
-       mixtranch.append((convertPixelToPercent(exp["pixels"]), exp))
+    for shouldnt_be_outer_exp in match[1:-1]:
+      for exp in shouldnt_be_outer_exp:
+        mixtranch.append((convertPixelToPercent(exp["pixels"]), exp))
     
     #last tranch_item
     if len(match) > 1:
@@ -238,7 +239,7 @@ bills_by_exp = []
 temp_storage = []
 for bill_i,bill in enumerate(bills):
     if bill_i == (BILLS_PER_COLUMN *2):
-      temp_storage.reverse()
+      temp_storage.reverse() #this flips the _text_ in the second column over, but not the bills themselves.
       bills_by_exp.extend(temp_storage)
     if bill_i >= BILLS_PER_COLUMN and bill_i < BILLS_PER_COLUMN *2:
       temp_storage.append([])
@@ -282,7 +283,7 @@ for bill_i,bill in enumerate(bills):
                 if expenditure[1]["whole_tranches_in_this_bill"] == 0:
                     expenditure[1]["text_width"] = 20
 
-                if bill_i % 2 == 0:
+                if (bill_i >= BILLS_PER_COLUMN and bill_i < (BILLS_PER_COLUMN *2)) != (bill_i % 2 == 0):
                   #print expenditure[1]["safe_name"] + " was at " + str(expenditure[1]["left"]) +" with width " + str(expenditure[1]["text_width"]) + "<br />"
                   expenditure[1]["left"] = 100 - (expenditure[1]["left"] + (expenditure[1]["text_width"]))
                   #Reflect  the text for reversed bills.
@@ -293,12 +294,6 @@ for bill_i,bill in enumerate(bills):
 
 
                 if expenditure[1]["whole_tranches_in_this_bill"] == 0 or expenditure[0] > FONT_HEIGHT:
-                    """if expenditure[0] > FONT_HEIGHT and expenditure[1]["whole_tranches_in_this_bill"] > 0:
-                        try:
-                            expenditure[1]["top"] = tranch[1][0]
-                        except IndexError:
-                            print "Failed on " + expenditure[1]["safe_name"]
-                    el"""
                     if exp_index == 1:
                         expenditure[1]["top"] = tranch[0][0]
                     elif exp_index == 2:
@@ -313,7 +308,7 @@ for bill_i,bill in enumerate(bills):
                     expenditure[1]["bills"].append(bill_i)
                 #print("<!--",expenditure[1]["safe_name"], "whole_tranches_in_bill", expenditure[1]["whole_tranches_in_this_bill"], "left", expenditure[1]["left"], "text_width", expenditure[1]["text_width"], "-->")
                 if bill_i >= BILLS_PER_COLUMN and bill_i < (BILLS_PER_COLUMN *2):
-                  #Flip the second column over.
+                  #Flip the middle column over.
                   temp_storage[bill_i-BILLS_PER_COLUMN].append(deepcopy(expenditure[1]))
                 else:
                   bills_by_exp[bill_i].append(deepcopy(expenditure[1]))
@@ -321,12 +316,14 @@ for bill_i,bill in enumerate(bills):
 
 
 
-    if bill_i % 2 == 0:
+    if (bill_i >= BILLS_PER_COLUMN and bill_i < (BILLS_PER_COLUMN *2)) != (bill_i % 2 == 0):
+      #if it's in the left or right column, flip every other starting with index 0. If in the middle column, flip every other starting with index 1.
+      #this convoluted logic makes the boustrephedon work in the middle column.
       bill.reverse() #for the "boustrephedon"-style of layout.
-      #reflect all the text.
-    temp = bills[BILLS_PER_COLUMN:BILLS_PER_COLUMN*2]
-    temp.reverse()
-    bills = bills[:BILLS_PER_COLUMN] + temp + bills[BILLS_PER_COLUMN*2:]
+      #reflects the text in every other bill.
+temp = bills[BILLS_PER_COLUMN:BILLS_PER_COLUMN*2]
+temp.reverse()
+bills = bills[:BILLS_PER_COLUMN] + temp + bills[BILLS_PER_COLUMN*2:]
 
 
 template = env.get_template('viztemplate.py')

@@ -8,7 +8,7 @@
                            position: {
                               target: $("div#text-{{exp.safe_name}}_{{bill_loop.index0}}"),
                               corner: {
-                                {% if exp.top != 0: %}
+                                {% if exp.top != 0 and exp.top != 2 or 0 in exp.bills: %}
                                  target: 'bottomMiddle',
                                  tooltip: 'topMiddle',
                                 {% else: %}
@@ -18,17 +18,11 @@
                               }
                            },
                            style: {
+                              width: { min: 0, max: 500},
                                 {% if exp.top != 0: %}
                                   tip: 'topMiddle'
                                 {% else: %}
                                   tip: 'bottomMiddle'
-                                {% endif %}
-                                {% if 0 in exp.bills or 7 in exp.bills or 13 in exp.bills: %}
-                                  , 'max-height': 80, 
-                                  width: { min: 0, max: 1000}
-                                {% elif 1 in exp.bills or 8 in exp.bills or 14 in exp.bills: %}
-                                  , 'max-height': 180,
-                                  width: { min: 0, max: 700}
                                 {% endif %}
                            }
                        });
@@ -38,7 +32,7 @@
                            hide: { when: 'mouseout', fixed: true },
                            position: {
                               corner: {
-                                {% if exp.top != 0: %}
+                                {% if exp.top != 0 and exp.top != 2  or 0 in exp.bills: %}
                                  target: 'bottomMiddle',
                                  tooltip: 'topMiddle',
                                 {% else: %}
@@ -48,17 +42,11 @@
                               }
                            },
                            style: {
+                                width: { min: 0, max: 500},
                                 {% if exp.top != 0: %}
                                   tip: 'topMiddle'
                                 {% else: %}
                                   tip: 'bottomMiddle'
-                                {% endif %}
-                                {% if 0 in exp.bills or 7 in exp.bills or 13 in exp.bills: %}
-                                  , 'max-height': 80, 
-                                  width: { min: 0, max: 1000}
-                                {% elif 1 in exp.bills or 8 in exp.bills or 14 in exp.bills: %}
-                                  , 'max-height': 180,
-                                  width: { min: 0, max: 700}
                                 {% endif %}
                            }
                     });
@@ -151,7 +139,7 @@
                position: {
                   target: $("div#text-{{exp.safe_name}}_{{bill_loop.index0}}"),
                   corner: {
-                    {% if exp.top != 2 and exp.top != 0: %}
+                    {% if exp.top != 2 and exp.top != 0 or 0 in exp.bills: %}
                      target: 'bottomMiddle',
                      tooltip: 'topMiddle',
                     {% else: %}
@@ -161,17 +149,11 @@
                   }
                },
                style: {
-                    {% if exp.top != 0  and exp.top != 2: %}
+                    width: { min: 0, max: 500},
+                    {% if exp.top != 0  and exp.top != 2 or 0 in exp.bills: %}
                       tip: 'topMiddle'
                     {% else: %}
                       tip: 'bottomMiddle'
-                    {% endif %}
-                    {% if 0 in exp.bills or 7 in exp.bills or 13 in exp.bills: %}
-                      , 'max-height': 80, 
-                      width: { min: 0, max: 1000}
-                    {% elif 1 in exp.bills or 8 in exp.bills or 14 in exp.bills: %}
-                      , 'max-height': 180,
-                      width: { min: 0, max: 700}
                     {% endif %}
                }
            });
@@ -191,17 +173,11 @@
                   }
                },
                style: {
+                    width: { min: 0, max: 500},
                     {% if exp.top != 0 and exp.top != 2: %}
                       tip: 'topMiddle'
                     {% else: %}
                       tip: 'bottomMiddle'
-                    {% endif %}
-                    {% if 0 in exp.bills or 7 in exp.bills or 13 in exp.bills: %}
-                      , 'max-height': 80, 
-                      width: { min: 0, max: 1000}
-                    {% elif 1 in exp.bills or 8 in exp.bills or 14 in exp.bills: %}
-                      , 'max-height': 180,
-                      width: { min: 0, max: 700}
                     {% endif %}
                }
         });
@@ -309,10 +285,10 @@ $(document).ready(function(){
   //$("div.coverer").css("opacity","0.3");
   //$("div.coverer").css("backgroundColor","black");
     $('#text-damages_2').css("font-size", 14);
-    $('#text-student_sec_0').css("font-size", 14);
-    $('#text-private_sec_5').css("font-size", 14);
+    $('.text-private_sec').css("font-size", 14);
+    $('.text-leftover').css("font-size", 14);
     $('#text-private_sec_5').css("top", $('#text-private_sec_5').css("font-size") -2);
-    $('.text-wedding').css("font-size", 14);
+    $('.text-co_chair').css("font-size", 14);
 
 });
 </script>
